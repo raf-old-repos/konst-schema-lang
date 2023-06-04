@@ -1,0 +1,6 @@
+object MyFaveObject 
+
+{
+    double kDouble = 12 + 14
+    string kString = "my little pony"
+}
