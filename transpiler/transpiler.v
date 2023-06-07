@@ -95,14 +95,12 @@ pub fn check_errors(tokens []Token) {
                                         index -= 1
                                 }
                         }
-
-						.value_string {
-
-							 mut index := i
+                        .value_string {
+                                mut index := i
 
                                 for index <= i {
                                         if tokens[index].token_type == .field_type {
-                                                if tokens[index].value != "string" {
+                                                if tokens[index].value != 'string' {
                                                         panic('Syntax error: Type mismatch, variable of type ${tokens[index].value} cannot have a string value. Did you mean ${tokens[i].value}? on line ${token.line}')
                                                 }
 
@@ -111,73 +109,60 @@ pub fn check_errors(tokens []Token) {
 
                                         index -= 1
                                 }
-								
-						}
+                        }
                         else {}
                 }
         }
 }
 
-pub fn transpile(tokens []Token) {
-	mut output := ""
-	for i, token in tokens {
-			match token.token_type  {
-				.object {
-					output += "public final class "
-				}
-				.identifier {
-					output += "${token.value} "
-				}
+pub fn transpile(tokens []Token) string {
+        mut output := ''
+        for token in tokens {
+                match token.token_type {
+                        .object {
+                                output += 'public static final class '
+                        }
+                        .identifier {
+                                output += '${token.value} '
+                        }
+                        .field_type {
+                                output += '${token.value} '
+                        }
+                        .field_identifier {
+                                output += '${token.value} '
+                        }
+                        .left_brace {
+                                output += '{ \n'
+                        }
+                        .right_brace {
+                                output += '}'
+                        }
+                        .end {
+                                output += '; \n'
+                        }
+                        .equals {
+                                output += '= '
+                        }
+                        .value {
+                                output += '${token.value} '
+                        }
+                        .value_string {
+                                output += '"${token.value}" '
+                        }
+                        .plus {
+                                output += '+ '
+                        }
+                        .minus {
+                                output += '- '
+                        }
+                        .multiply {
+                                output += '* '
+                        }
+                        .divide {
+                                output += '/ '
+                        }
+                }
+        }
 
-				.field_type {
-					output += "${token.value} "
-				}
-
-				.field_identifier {
-					output += "${token.value} "
-				}
-
-				.left_brace {
-					output += "{ \n"
-				}
-
-				.right_brace {
-					output += "}"
-				}
-				.end {
-					output += "; \n"
-				}
-				
-
-				.equals {
-					output += "= "
-				}
-
-				.value {
-					output += "${token.value} "
-				}
-
-				.value_string {
-					output += '"${token.value}" '
-				}
-
-				.plus {
-					output += "+ "
-				}
-
-				.minus {
-					output += "- "
-				}
-
-				.multiply {
-					output += "* "
-				}
-				.divide {
-					output += "/ "
-				}
-				
-			}
-	}
-
-	return output
+        return output
 }
