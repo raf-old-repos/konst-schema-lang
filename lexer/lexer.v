@@ -2,7 +2,7 @@ module lexer
 
 import os
 
-enum TokenType {
+pub enum TokenType {
 	left_brace
 	right_brace
 	object
@@ -11,6 +11,7 @@ enum TokenType {
 	equals
 	end
 	value
+	value_string
 	plus
 	minus
 	multiply
@@ -18,10 +19,14 @@ enum TokenType {
 	field_type
 }
 
-struct Token {
-	token_type TokenType
+pub struct Token {
+	pub: 
+		
+		token_type TokenType
 
-	value string
+		value string
+
+		line  int
 }
 
 pub fn lex_file(path string) []Token {
@@ -39,8 +44,10 @@ pub fn lex(lines []string) []Token {
 
 	println(lines)
 
-	for line in lines {
+	for i, line in lines {
 		println(line)
+
+		indx := i + 1
 
 		if line != '' {
 			for word in line.split(' ') {
@@ -49,78 +56,91 @@ pub fn lex(lines []string) []Token {
 						tokens << Token{
 							token_type: .object
 							value: 'object'
+							line: indx
 						}
 					}
 					'int' {
 						tokens << Token{
 							token_type: .field_type
 							value: 'int'
+							line: indx
 						}
 					}
 					'string' {
 						tokens << Token{
 							token_type: .field_type
 							value: 'string'
+							line: indx
 						}
 					}
 					'bool' {
 						tokens << Token{
 							token_type: .field_type
 							value: 'bool'
+							line: indx
 						}
 					}
 					'float' {
 						tokens << Token{
 							token_type: .field_type
 							value: 'float'
+							line: indx
 						}
 					}
 					'double' {
 						tokens << Token{
 							token_type: .field_type
 							value: 'double'
+							line: indx
 						}
 					}
 					'=' {
 						tokens << Token{
 							token_type: .equals
 							value: '='
+							line: indx
 						}
 					}
 					'+' {
 						tokens << Token{
 							token_type: .plus
 							value: '+'
+							line: indx
 						}
 					}
 					'-' {
 						tokens << Token{
 							token_type: .minus
 							value: '-'
+							line: indx
 						}
 					}
 					'*' {
 						tokens << Token{
 							token_type: .multiply
 							value: '*'
+							line: indx
 						}
 					}
 					'/' {
 						tokens << Token{
 							token_type: .divide
 							value: '/'
+							line: indx
 						}
 					}
 					'{' {
 						tokens << Token{
 							token_type: .left_brace
 							value: '{'
+							line: indx
 						}
 					}
 					'}' {
 						tokens << Token{
 							token_type: .right_brace
 							value: '}'
+							line: indx
 						}
 					}
 					else {
@@ -129,18 +149,21 @@ pub fn lex(lines []string) []Token {
 								tokens << Token{
 									token_type: .field_type
 									value: word
+									line: indx
 								}
 							}
 							.object {
 								tokens << Token{
 									token_type: .identifier
 									value: word
+									line: indx
 								}
 							}
 							.plus {
 								tokens << Token{
 									token_type: .value
 									value: word
+									line: indx
 								}
 							}
 
@@ -148,6 +171,7 @@ pub fn lex(lines []string) []Token {
 								tokens << Token{
 									token_type: .value
 									value: word
+									line: indx
 								}
 							}
 
@@ -155,6 +179,7 @@ pub fn lex(lines []string) []Token {
 								tokens << Token{
 									token_type: .value
 									value: word
+									line: indx
 								}
 							}
 
@@ -162,20 +187,23 @@ pub fn lex(lines []string) []Token {
 								tokens << Token{
 									token_type: .value
 									value: word
+									line: indx
 								}
 							}
 
 							.equals {
 								if line.contains('"') {
 									tokens << Token{
-										token_type: .value
+										token_type: .value_string
 										value: line.substr(line.index_u8('"'.bytes()[0]) + 1,
 											line.last_index_u8('"'.bytes()[0]))
+										line: indx
 									}
 								} else {
 									tokens << Token{
 										token_type: .value
 										value: word
+										line: indx
 									}
 								}
 							}
@@ -190,6 +218,7 @@ pub fn lex(lines []string) []Token {
 			tokens << Token{
 				token_type: .end
 				value: 'end'
+				line: indx
 			}
 		}
 	}
@@ -216,6 +245,8 @@ pub fn lex(lines []string) []Token {
 				.left_brace {
 					tokens.delete(i)
 				}
+
+				
 				else {
 					continue
 				}

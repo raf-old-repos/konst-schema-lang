@@ -3,4 +3,9 @@ object MyFaveObject
 {
     double kDouble = 12 + 14
     string kString = "my little pony"
+
+    object Thong {
+        double fuckMe = 23
+        string kLol = "Shit in my pussy"
+    }
 }
