@@ -42,11 +42,10 @@ pub fn lex_file(path string) []Token {
 pub fn lex(lines []string) []Token {
 	mut tokens := []Token{}
 
-	println(lines)
+
 
 	for i, line in lines {
-		println(line)
-
+	
 		indx := i + 1
 
 		if line != '' {
@@ -191,8 +190,23 @@ pub fn lex(lines []string) []Token {
 								}
 							}
 
+							.field_type {
+								tokens << Token{
+									token_type: .field_identifier
+									value: word
+									line: indx
+								}
+							}
+
 							.equals {
 								if line.contains('"') {
+
+								
+
+									if line.count('"') % 2 != 0 {
+										panic("Syntax error: Odd number of quotes")
+									}
+
 									tokens << Token{
 										token_type: .value_string
 										value: line.substr(line.index_u8('"'.bytes()[0]) + 1,
@@ -243,6 +257,10 @@ pub fn lex(lines []string) []Token {
 					tokens.delete(i)
 				}
 				.left_brace {
+					tokens.delete(i)
+				}
+
+				.right_brace {
 					tokens.delete(i)
 				}
 

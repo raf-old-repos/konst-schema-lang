@@ -1,12 +1,24 @@
 import lexer  { lex_file }
+import transpiler { check_errors, transpile}
 
 fn main() {
 	
 
 	tokens  := lex_file("test.knst")
 
-	println(tokens)
 	
+
+
+
+	check_errors(tokens)
+
+
+	output := transpile(tokens)
+
+
+	
+
+
 
 	
 

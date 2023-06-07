@@ -1,11 +1,11 @@
 object MyFaveObject 
 
 {
-    double kDouble = 12 + 14
-    string kString = "my little pony"
+    double kDouble = 12 
+    string kString = "Physics 1"
 
-    object Thong {
-        double fuckMe = 23
-        string kLol = "Shit in my pussy"
+    object Ports {
+        double kAnotherDouble = 23
+        string kLol = "Physics 2"
     }
 }
